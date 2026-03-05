@@ -2,9 +2,16 @@ import os
 import sys
 from src.exception import CustomException
 from src.logger import logging
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
 
 
 @dataclass #decorator to automatically generate special methods like __init__() and __repr__() for the class
@@ -42,3 +49,13 @@ class DataIngestion:
 
         except Exception as e:
             raise CustomException(e, sys) #raise a custom exception if any error occurs during the data ingestion process
+        
+if __name__ == "__main__":
+    obj = DataIngestion() #create an instance of the DataIngestion class
+    train_data, test_data = obj.initiate_data_ingestion() #initiate the data ingestion process and get the paths to the training and testing
+
+    data_transformation = DataTransformation() #create an instance of the DataTransformation class
+    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data) #initiate the data transformation process and get the transformed training and testing data along with the path to the preprocessor object 
+
+    model_trainer = ModelTrainer() #create an instance of the ModelTrainer class
+    print(model_trainer.initiate_model_trainer(train_arr, test_arr)) #initiate the model training process and print the results
