@@ -1,5 +1,6 @@
 import sys   # sys module provides access to some variables used or maintained 
             #by the interpreter and to functions that interact strongly with the interpreter.
+from src.logger import logging  # Importing the logging module from the src package to enable logging of error messages.
 
 def error_message_detail(error, error_detail: sys):
     _, _, exc_tb = error_detail.exc_info()  # exc_info() returns a tuple containing information about the exception that is currently being handled.
@@ -9,6 +10,7 @@ def error_message_detail(error, error_detail: sys):
                                                     # f_code is a reference to the code object being executed in that frame, and co_filename is the name of the file from which the code was loaded.
     line_number = exc_tb.tb_lineno  # tb_lineno is an attribute of the traceback object that indicates the line number in the source code where the exception occurred.
     error_message = f"Error occurred in script: {file_name} at line number: {line_number} with error message: {str(error)}"
+    logging.error(error_message)  # Log the error message using the logging module.
     return error_message
 
 class CustomException(Exception):
